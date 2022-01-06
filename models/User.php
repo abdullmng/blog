@@ -29,7 +29,6 @@
                 $register = self::$db->prepare("INSERT INTO `users` (`name`, `email`, `password`)VALUES(?,?,?)");
                 if ($register->execute([$this->data['name'], $this->data['email'], password_hash($this->data['password'], PASSWORD_DEFAULT)])) {
                     $this->insertId = self::$db->lastInsertId();
-                    file_put_contents("user.txt", $this->insertId);
                     return true;
                 }else {
                     return false;

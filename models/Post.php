@@ -35,7 +35,6 @@
                 $insert = self::$db->prepare("INSERT INTO `posts` (`title`, `body`, `userid`)VALUES(?,?,?)");
                 if ($insert->execute([$this->data['title'], $this->data['body'], $this->userid])) {
                     $this->insertId = self::$db->lastInsertId();
-                    file_put_contents("file.txt", $this->insertId);
                     return true;
                 }else {
                     return false;
