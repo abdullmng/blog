@@ -1,6 +1,7 @@
 <?php 
     function DbConnect() {
-        return new PDO("mysql:host=localhost;dbname=lsapp", "root", "");
+        $db = new PDO("mysql:host=localhost;dbname=lsapp", "root", "");
+        return $db;
     }
 
     spl_autoload_register(function($className) {

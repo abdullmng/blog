@@ -8,7 +8,7 @@
         if ($user->register()) {
             $_SESSION['USER_ID'] = $user->insertId;
             $_SESSION['USER_EMAIL'] = $data['email'];
-            $_SESSION['_reg_success'] = 1;
+            $_SESSION['reg_success'] = 1;
             return array('<div class="alert alert-success">Registration successful</div>');
         }else {
             $_SESSION['reg_success'] = 0;

@@ -1,11 +1,13 @@
 <?php 
     class User {
         public $errors, $data, $insertId; 
+        private static $db;
         function __construct($data)
         {
             $this->errors = [];
             $this->data = $data;
             $this->insertId = 0;
+            self::$db = DbConnect();
         }
 
         private function validate() {
@@ -13,7 +15,7 @@
             if (empty(trim($this->data['email']))) {array_push($this->errors, '<div class="alert alert-danger">Please enter yor email address</div>');}
             if (empty(trim($this->data['password']))) {array_push($this->errors, '<div class="alert alert-danger">Please enter create a password!</div>');}
 
-            $check = DbConnect()->prepare("SELECT * FROM `users` WHERE `email`=?");
+            $check = self::$db->prepare("SELECT * FROM `users` WHERE `email`=?");
             $check->execute([$this->data['email']]);
             $foundEmail = $check->rowCount();
             if ($foundEmail) {
@@ -24,9 +26,10 @@
         public function register() {
             $this->validate();
             if (!count($this->errors)) {
-                $register = DbConnect()->prepare("INSERT INTO `users` (`name`, `email`, `password`)VALUES(?,?,?)");
+                $register = self::$db->prepare("INSERT INTO `users` (`name`, `email`, `password`)VALUES(?,?,?)");
                 if ($register->execute([$this->data['name'], $this->data['email'], password_hash($this->data['password'], PASSWORD_DEFAULT)])) {
-                    $this->insertId = DbConnect()->lastInsertId();
+                    $this->insertId = self::$db->lastInsertId();
+                    file_put_contents("user.txt", $this->insertId);
                     return true;
                 }else {
                     return false;
@@ -37,7 +40,7 @@
         }
 
         public function login() {
-            $login = DbConnect()->prepare("SELECT * FROM `users` WHERE `email`=?");
+            $login = self::$db->prepare("SELECT * FROM `users` WHERE `email`=?");
             $login->execute([$this->data['email']]);
             $foundLogin = $login->rowCount();
             $row_login = $login->fetch(PDO::FETCH_ASSOC);

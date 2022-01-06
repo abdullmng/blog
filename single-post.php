@@ -4,7 +4,7 @@
     include 'header.php';
     if (isset($_GET['pid'])) {
         $postId = $_GET['pid'];
-        $post = Post::getPostById($postId);
+        $post = showSingle($postId);
         $isVisitorOwner = false;
 
         if ($post) {

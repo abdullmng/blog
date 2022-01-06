@@ -26,3 +26,22 @@
             return $post->errors;
         }
     }
+
+    function showSingle($id) {
+        $post = Post::getPostById($id);
+        return $post;
+    }
+
+    function update($data, $postId, $userid) {
+        if (isset($_SESSION['upd_ok'])) {
+            unset($_SESSION['upd_ok']);
+        }
+        $post = new Post($data, $userid);
+        if ($post->updatePost($postId)) {
+            $_SESSION['upd_ok'] = 1;
+            return array('<div class="alert alert-success">Post created!</div>');
+        }else {
+            $_SESSION['upd_ok'] = 0;
+            return $post->errors;
+        }
+    }
